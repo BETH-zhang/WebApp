@@ -78,6 +78,20 @@
 ###各环节出问题易于找到问题
 ##技术实现
 ###技术规划，选型
+####JS类规划
+  内容组织类：H5
+    作用：组织H5报告的内容结构，设置H5报告的切换效果
+    方法：添加一个页addPage,添加一个组件addComponent
+  图文组件类：H5ComponentBase
+    作用：输出一个DOM，内容可以是图片或者文字
+    事件：当前页载入onLoad，当前页移除onLeave
+  图表组件类：H5Component？？？
+    作用：在H5ComponentBase的基础之上插入DOM结构或者CANVAS图形
+    事件：当前页载入移除onLoad，onLeave图表组件本身的生长动画
+  项目JS类总结
+    内容组织类：H5
+    图文组件类：H5ComponentBase
+    图表组件类：H5Component？？？
 ###设计易扩展的开发方案
 ###开发各种图标组件
 
