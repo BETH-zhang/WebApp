@@ -37,7 +37,21 @@
 
         <script type="text/javascript">
 
+            var cfg = {
+                type: 'base',
+                text: '大家好大家好大家好大家好大家好大家好大家好大家好大家好大家好大家好大家好大家好大家好大家好',
+                bg: './p1_people.png',
+                width: 514,
+                height: 306,
+                css: {
+                    left: 50,
+                    top: 50
+                },
+                center: true
+            }
 
+            var h5 = new H5ComponentBase('myName', cfg);
+            $('.iphone').append(h5);
         </script>
 
     </body>
