@@ -3,8 +3,10 @@
 var H5ComponentBase = function(name, cfg){
 	var cfg = cfg || {};
 	var id = ('h5_c_' + Math.random()).replace('.', '_');
-	var cls =  'h5_component_name_' + name + ' h5_component_' + cfg.type; //把当前的组件类型添加到样式中进行标记
-	var component = $('<div class="h5_component '+cls+'" id="'+id+'">');
+
+	var cls = ' h5_component_' + cfg.type; //把当前的组件类型添加到样式中进行标记
+	var component = $('<div class="h5_component '+cls+' h5_component_name_' + name + '" id="'+id+'">');
+	
 	cfg.text && component.text(cfg.text);
 	cfg.width && component.width(cfg.width/2);
 	cfg.height && component.height(cfg.height/2);
@@ -20,8 +22,28 @@ var H5ComponentBase = function(name, cfg){
 	}
 
 	// ...很多自定义的参数
+	if(typeof cfg.onclick === 'function'){
+		component.on('click', cfg.onclick);
+	}
+
+	//任务一：支持 relativeTo参数（CSS translate 实现方法）
+	//任务二：获取 relateveTo元素的位置，应该用offsetLeft、offsetTop
+	//任务二：考虑 cfg.center 对relativeTo参数的影响，并且在有，没有这两种情况下都要支持
+	//不知道怎么用
+	if(cfg.relateveTo){
+		var parent = $('body').find('.h5_component_name_'+cfg.relateveTo);
+		var position = {
+			left: $(parent)[0].offsetLeft,
+			top: $(parent)[0].offsetTop,
+		};
+		if(cfg.center === true){
+			position.left = 0;
+		}
+		component.css('transform', 'translate('+position.left+'px,'+position.top+'px)');
+	}
 	
     component.on('onLoad', function(){
+    	console.log('--');
         component.addClass(cls + '_load').removeClass(cls + '_leave');
         cfg.animateIn && component.animate(cfg.animateIn)
         return false;
@@ -31,5 +53,6 @@ var H5ComponentBase = function(name, cfg){
         cfg.animateOut && component.animate(cfg.animateOut)
         return false;
     });
+    
 	return component;
 }
