@@ -54,18 +54,42 @@ var H5ComponentPolyline = function(name, cfg){
 
 	var x = 0;
 	var y = 0;
-	var row_w = cfg.data.length+1;
+	var row_w = w/(cfg.data.length+1);
 	// 画点
 	for(i in cfg.data){
 		var item = cfg.data[i];
 
-		x = (w/row_w) * i + (w/row_w);
+		x = row_w * i + row_w;
 		y = h * (1-item[1]);
 
 		ctx.moveTo(x, y);
 		ctx.arc(x, y, 5, 0, 2*Math.PI);
-		ctx.stroke();
+		// ctx.stroke();
 	}
+
+	// 连线
+	// 移动画笔到第一个数据的点位置
+	ctx.moveTo(row_w, h * (1-cfg.data[0][1]));
+	// ctx.arc(row_w, h * (1-cfg.data[0][1]), 20, 0, 2*Math.PI);
+	// ctx.stroke();
+	for(i in cfg.data){
+		var item = cfg.data[i];
+		x = row_w * i + row_w;
+		y = h * (1-item[1]);
+		ctx.lineTo(x, y);
+	}	
+
+	// 写数据
+	for(i in cfg.data){
+		var item = cfg.data[i];
+		x = row_w * i + row_w;
+		y = h * (1-item[1]);
+		ctx.fillStyle = item[2] ? item[2] : '#000';
+		ctx.fillText(((item[1]*100) >> 0)+'%', x-10, y-10);
+	}	
+
+	ctx.stroke();
+
 
 	return component;
 }
