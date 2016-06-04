@@ -40,10 +40,43 @@
 
         </div>
 
+        
         <script type="text/javascript">
+         var cfg = {
+                type: 'pie',
+                width: 300,
+                height: 300,
+                data: [
+                    ['A项', .6, 'green'],
+                    ['B项', .2, 'yellow'],
+                    ['C项', .1, 'red'],
+                    ['D项', .1, 'gray']
+                ],
+                css: {
+                    top: 100,
+                    opacity: 1
+                },
+                // animateIn: {
+                //     top: 200,
+                //     opacity: 1
+                // },
+                // animateOut: {
+                //     top: 0,
+                //     opacity: 0
+                // },
+                center: true
+            }
 
+            var h5 = new H5ComponentPie('myName', cfg);
+            $('.iphone').append(h5);
 
+            var leave = true;
+            $('body').click(function(){
+                leave = !leave;
+                $('.h5_component').trigger(leave ? 'onLeave' : 'onLoad');
+            });
         </script>
+
 
     </body>
 
