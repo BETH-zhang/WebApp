@@ -64,6 +64,34 @@ var H5ComponentPie = function(name, cfg){
 		ctx.stroke();
 
 		sAngel = eAngel;
+
+		// 加入所有项目文本遗迹百分比
+		var text = $('<div class="text">');
+		text.text(cfg.data[i][0]);
+		var per = $('<div class="per">');
+		per.text(cfg.data[i][1]*100+'%');
+		text.append(per);
+
+		var x = r + Math.sin(.5 * Math.PI - sAngel)*r;
+		var y = r + Math.cos(.5 * Math.PI - sAngel)*r;
+		// text.css('left', x/2).css('top', y/2);
+		if(x>w/2){
+			text.css('left', x/2);
+		}else{
+			text.css('right', (w-x)/2);
+		}
+
+		if(y>h/2){
+			text.css('top', y/2);
+		}else{
+			text.css('bottom', (h-y)/2);
+		}
+		if(cfg.data[i][2]){
+			text.css('color', cfg.data[i][2]);
+		}
+
+		text.css('opacity', 0);
+		component.append(text);
 	}
 
 	// 加入一个蒙板层
@@ -88,13 +116,18 @@ var H5ComponentPie = function(name, cfg){
 		ctx.moveTo(r, r);
 
 		if(per <= 0){
-			ctx.arc(r, r, r, 0, 2*Math.PI*per);		
+			ctx.arc(r, r, r, 0, 2*Math.PI*per);	
+			component.find('.text').css('opacity', 0);	
 		}else{
 			ctx.arc(r, r, r, sAngel, sAngel + 2*Math.PI*per, true);			
 		}
 		
 		ctx.fill();
 		ctx.stroke();
+
+		if(per >= 1){
+			component.find('.text').css('opacity', 1);
+		}
 
 	}
 
