@@ -43,7 +43,6 @@ var H5ComponentBase = function(name, cfg){
 	}
 	
     component.on('onLoad', function(){
-    	console.log('--');
         component.addClass(cls + '_load').removeClass(cls + '_leave');
         cfg.animateIn && component.animate(cfg.animateIn)
         return false;
