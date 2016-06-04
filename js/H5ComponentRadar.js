@@ -60,11 +60,51 @@ var H5ComponentRadar = function(name, cfg){
 		ctx.moveTo(r, r);
 		ctx.lineTo(x, y);
 	}
-	ctx.strokeStyle = '#99c0ff';
+	ctx.strokeStyle = '#e0e0e0';
 	ctx.stroke();
 
-	var draw = function(per){
+	// 数据层的开发
+	// 加入一个画布
+	var cns = document.createElement('canvas');
+	var ctx = cns.getContext('2d');
+	cns.width = ctx.width = w;
+	cns.height = ctx.height = h;
+	component.append(cns);
 
+	ctx.strokeStyle = '#f00';
+
+	var draw = function(per){
+		ctx.clearRect(0, 0, w, h);
+		// 输出数据的折线
+		for(var i=0;i<step;i++){
+			var rad = (2*Math.PI/360)*(360/step)*i;
+			
+			var rate = cfg.data[i][1] * per;
+
+			var x = r + Math.sin(rad) * r * rate;
+			var y = r + Math.cos(rad) * r * rate;
+
+			ctx.lineTo(x, y);
+			// ctx.arc(x, y, 5, 0, 2*Math.PI);
+			// ctx.fill();
+		}
+		ctx.closePath();
+		ctx.stroke();
+
+		// 输出数据的点
+		ctx.fillStyle = '#ff7677';
+		for(var i=0;i<step;i++){
+			var rad = (2*Math.PI/360)*(360/step)*i;
+			var rate = cfg.data[i][1] * per;
+
+			var x = r + Math.sin(rad) * r * rate;
+			var y = r + Math.cos(rad) * r * rate;
+
+			ctx.beginPath();
+			ctx.arc(x, y, 5, 0, 2*Math.PI);
+			ctx.fill();
+			ctx.closePath();
+		}
 	}
 
 	component.on('onLoad', function(){
@@ -73,7 +113,7 @@ var H5ComponentRadar = function(name, cfg){
 		for(i=0;i<100;i++){
 			setTimeout(function(){
 				s+=.01;
-				// draw(s);
+				draw(s);
 			}, i*10+500);
 		}
 	});
