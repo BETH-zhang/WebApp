@@ -56,58 +56,92 @@ var H5ComponentPolyline = function(name, cfg){
 	cns.height = ctx.height = h;
 	component.append(cns);
 
-	// 绘制折线数据
-	ctx.beginPath();
-	ctx.lineWidth = 3;
-	ctx.strokeStyle = '#ff8878';
+	/**
+	 * 绘制折线遗迹对应的数据和阴影
+	 * @param  {float} per 0-1之间的数据，会根据这个值绘制数据
+	 * @return {[type]}     [description]
+	 */
+	var draw = function(per){
+		// 清空画布
+		ctx.clearRect(0, 0, w, h);
 
-	var x = 0;
-	var y = 0;
-	var row_w = w/(cfg.data.length+1);
-	// 画点
-	for(i in cfg.data){
-		var item = cfg.data[i];
+		// 绘制折线数据
+		ctx.beginPath();
+		ctx.lineWidth = 3;
+		ctx.strokeStyle = '#ff8878';
 
-		x = row_w * i + row_w;
-		y = h * (1-item[1]);
+		var x = 0;
+		var y = 0;
+		var row_w = w/(cfg.data.length+1);
+		// 画点
+		for(i in cfg.data){
+			var item = cfg.data[i];
 
-		ctx.moveTo(x, y);
-		ctx.arc(x, y, 5, 0, 2*Math.PI);
+			x = row_w * i + row_w;
+			// y = h * (1-item[1]);
+			// 传入相对值之后的绘制点
+			y = h - (item[1]*h*per);
+
+			ctx.moveTo(x, y);
+			ctx.arc(x, y, 5, 0, 2*Math.PI);
+			// ctx.stroke();
+		}
+
+		// 连线
+		// 移动画笔到第一个数据的点位置
+		ctx.moveTo(row_w, h - (cfg.data[0][1]*h*per) );
+		// ctx.arc(row_w, h * (1-cfg.data[0][1]), 20, 0, 2*Math.PI);
 		// ctx.stroke();
+		for(i in cfg.data){
+			var item = cfg.data[i];
+			x = row_w * i + row_w;
+			y = h - (item[1]*h*per);
+			ctx.lineTo(x, y);
+		}
+
+		ctx.stroke();
+		ctx.lineWidth = 1;
+		ctx.fillStyle = 'rgba(255, 135, 120, 0.2)';
+
+		// 绘制阴影
+		ctx.lineTo(x, h);
+		ctx.lineTo(row_w, h);
+		ctx.fill();
+
+		// 写数据
+		for(i in cfg.data){
+			var item = cfg.data[i];
+			x = row_w * i + row_w;
+			y = h - (item[1]*h*per);
+			ctx.fillStyle = item[2] ? item[2] : '#000';
+			ctx.fillText(((item[1]*100) >> 0)+'%', x-10, y-10);
+		}	
+
+
+		ctx.stroke();
+
 	}
 
-	// 连线
-	// 移动画笔到第一个数据的点位置
-	ctx.moveTo(row_w, h * (1-cfg.data[0][1]));
-	// ctx.arc(row_w, h * (1-cfg.data[0][1]), 20, 0, 2*Math.PI);
-	// ctx.stroke();
-	for(i in cfg.data){
-		var item = cfg.data[i];
-		x = row_w * i + row_w;
-		y = h * (1-item[1]);
-		ctx.lineTo(x, y);
-	}
+	component.on('onLoad', function(){
+		// 折线图生长动画
+		var s = 0;				
+		for(i=0;i<100;i++){
+			setTimeout(function(){
+				s+=.01;
+				draw(s);			
+			}, i*10);
+		}
+	});
 
-	ctx.stroke();
-	ctx.lineWidth = 1;
-	ctx.fillStyle = 'rgba(255, 135, 120, 0.2)';
-
-	// 绘制阴影
-	ctx.lineTo(x, h);
-	ctx.lineTo(row_w, h);
-	ctx.fill();
-
-	// 写数据
-	for(i in cfg.data){
-		var item = cfg.data[i];
-		x = row_w * i + row_w;
-		y = h * (1-item[1]);
-		ctx.fillStyle = item[2] ? item[2] : '#000';
-		ctx.fillText(((item[1]*100) >> 0)+'%', x-10, y-10);
-	}	
-
-
-	ctx.stroke();
+	component.on('onLeave', function(){
+		var s = 1;
+		for(i=0;i<100;i++){
+			setTimeout(function(){
+				s-=.01;
+				draw(s);			
+			}, i*10);
+		}
+	});
 
 
 	return component;
