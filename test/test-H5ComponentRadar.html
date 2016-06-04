@@ -40,9 +40,42 @@
 
         </div>
 
+       
         <script type="text/javascript">
+            var cfg = {
+                type: 'radar',
+                width: 500,
+                height: 500,
+                data: [
+                    ['js', .4, '#060'],
+                    ['html/css', .2],
+                    ['css3', .1],
+                    ['html5', .1],
+                    ['jquery', .35]
+                ],
+                css: {
+                    top: 100,
+                    // opacity: 0,
+                },
+                // animateIn: {
+                //     top: 200,
+                //     opacity: 1
+                // },
+                // animateOut: {
+                //     top: 100,
+                //     opacity: 0
+                // },
+                center: true
+            }
 
+            var h5 = new H5ComponentRadar('myName', cfg);
+            $('.iphone').append(h5);
 
+            var leave = true;
+            $('body').click(function(){
+                leave = !leave;
+                $('.h5_component').trigger(leave ? 'onLeave' : 'onLoad');
+            });
         </script>
 
     </body>
