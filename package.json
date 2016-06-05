@@ -1,0 +1,29 @@
+{
+  "name": "h5",
+  "version": "1.0.0",
+  "description": "##开发流程 ###为什么要说流程",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    // "start": "node server.js",
+    "start": "http-server -a 0.0.0.0 -p 8000",
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BETH-zhang/WebApp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BETH-zhang/WebApp/issues"
+  },
+  "homepage": "https://github.com/BETH-zhang/WebApp#readme",
+  "dependencies": {
+    "ejs": "^2.4.2",
+    "express": "^4.13.4",
+    "http-server": "^0.9.0"
+  }
+}

@@ -70,6 +70,11 @@
 
     
     <body>
+        <div class="loading">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+            <div id="rate">0%</div>
+        </div>
 
     <!-- 加载 H5组件 相关资源 -->
     <script type="text/javascript">
@@ -245,7 +250,8 @@
                         ['Android', .7, '#ff7676'],
                         ['IOS', .2],
                         ['Co2d', .3],
-                        ['Unity-3D', .05]
+                        ['Unity-3D', .05],
+                        ['Unity-3D', .02]
                     ],
                     css: {
                         top: 100,
@@ -511,7 +517,7 @@
                 })
 
 
-            .loader(1);
+            .loader(['imgs/tail_back.png','imgs/page_bg.png', 'imgs/face_bg.png','imgs/tail_share.png','imgs/page_caption_bg.png','imgs/footer.png','imgs/p1_people.png','imgs/tail_logo.png','imgs/face_img_right.png','imgs/face_img_left.png','imgs/tail_slogan.png'], 3);
         })
     </script>
 
