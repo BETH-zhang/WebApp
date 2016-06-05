@@ -38,21 +38,14 @@ var H5ComponentPie = function(name, cfg){
 	var eAngel = 0;//结束角度
 	var aAngel = Math.PI*2;//100%的圆结束的角度2pi=360
 
-	// ctx.beginPath();
-	// ctx.fillStyle = '#f00';
-	// ctx.strokeStyle = '#cc0';
-	// ctx.lineWidth = 1;
-	// ctx.moveTo(r, r);
-	// ctx.arc(r, r, r, sAngel, aAngel);
-	// ctx.fill();
-	// ctx.stroke();
-
 	var step = cfg.data.length;
 	for(var i=0;i<step;i++){
+
 		var item = cfg.data[i];
 		var color = item[2] || ( item[2] = colors.pop() );
 		
 		eAngel = sAngel + aAngel * item[1];
+
 		ctx.beginPath();
 		ctx.fillStyle = color;
 		ctx.strokeStyle = color;
@@ -102,7 +95,6 @@ var H5ComponentPie = function(name, cfg){
 	$(cns).css('zIndex', 3);
 
 	component.append(cns);
-	var r = w/2;
 
 	ctx.fillStyle = '#eee';
 	ctx.strokeStyle = '#eee';
@@ -116,22 +108,23 @@ var H5ComponentPie = function(name, cfg){
 		ctx.moveTo(r, r);
 
 		if(per <= 0){
-			ctx.arc(r, r, r, 0, 2*Math.PI*per);	
-			component.find('.text').css('opacity', 0);	
-		}else{
-			ctx.arc(r, r, r, sAngel, sAngel + 2*Math.PI*per, true);			
+			ctx.arc(r, r, r, 0, 2*Math.PI);	
+			component.find('.text').css('opacity', 0);
+		}else{	
+			ctx.arc(r, r, r, sAngel, sAngel + 2*Math.PI*per, true);
 		}
-		
+
 		ctx.fill();
 		ctx.stroke();
-
+		
 		if(per >= 1){
 			component.find('.text').css('opacity', 1);
+      		ctx.clearRect(0,0,w,h);
 		}
 
 	}
-
-	// draw(0);
+	
+	draw(0);
 
 	component.on('onLoad', function(){
 		var s = 0;
