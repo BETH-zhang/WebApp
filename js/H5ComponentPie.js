@@ -33,7 +33,7 @@ var H5ComponentPie = function(name, cfg){
 	$(cns).css('zIndex', 2);
 	component.append(cns);
 
-	var colors = ['red', 'green', 'blue', 'red', 'orange'];//备用颜色
+	var colors = ['red', 'green', 'blue', 'red', 'orange', 'blue', 'green'];//备用颜色
 	var sAngel = 1.5 * Math.PI;// 设置开始的角度在12点位置
 	var eAngel = 0;//结束角度
 	var aAngel = Math.PI*2;//100%的圆结束的角度2pi=360
@@ -80,7 +80,9 @@ var H5ComponentPie = function(name, cfg){
 			text.css('bottom', (h-y)/2);
 		}
 		if(cfg.data[i][2]){
-			text.css('color', cfg.data[i][2]);
+			// text.css('color', cfg.data[i][2]);
+			text.css('color', '#fff');
+			text.css('backgroundColor', cfg.data[i][2]);
 		}
 
 		text.css('opacity', 0);
@@ -109,7 +111,8 @@ var H5ComponentPie = function(name, cfg){
 
 		if(per <= 0){
 			ctx.arc(r, r, r, 0, 2*Math.PI);	
-			component.find('.text').css('opacity', 0);
+			// component.find('.text').css('opacity', 0);
+			component.find('.text').css('opacity', 1);
 		}else{	
 			ctx.arc(r, r, r, sAngel, sAngel + 2*Math.PI*per, true);
 		}
@@ -118,7 +121,8 @@ var H5ComponentPie = function(name, cfg){
 		ctx.stroke();
 		
 		if(per >= 1){
-			component.find('.text').css('opacity', 1);
+			H5ComponentPie.reSort(component.find('.text'));
+			// component.find('.text').css('opacity', 1);
       		ctx.clearRect(0,0,w,h);
 		}
 
@@ -149,6 +153,68 @@ var H5ComponentPie = function(name, cfg){
 	return component;
 }
 
+// 重排
+H5ComponentPie.reSort = function(list){
+	console.log(list);
+
+	//1.检测相交
+	var compare = function(domA, domB){
+
+		// 元素的位置，不用left，因为有时left为auto
+		var offsetA = $(domA).offset();
+		var offsetB = $(domB).offset();
+
+		// domA 的投影
+		var shadowA_x = [offsetA.left, $(domA).width() + offsetA.left];
+		var shadowA_y = [offsetA.top, $(domA).height + offsetA.top];
+		
+		// domB 的投影
+		var shadowB_x = [offsetB.left, $(domB).width() + offsetB.left];
+		var shadowB_y = [offsetB.top, $(domB).height + offsetB.top];
+	
+		// 检测x
+		var intersect_x = ( shadowA_x[0] > shadowB_x[0] && shadowA_x[0] < shadowB_x[1] ) || ( shadowA_x[1] > shadowB_x[0] && shadowA_x[1] < shadowB_x[1] );
+		// 检测y轴头鹰是否相交
+		var intersect_y = ( shadowA_y[0] > shadowB_y[0] && shadowA_y[0] < shadowB_y[1] ) || ( shadowA_y[1] > shadowB_y[0] && shadowA_y[1] < shadowB_y[1] );
+	
+		console.log(intersect_x, intersect_y);
+		
+		return intersect_x && intersect_y;
+	}
+
+	//2.错开重排
+	var reset = function(domA, domB){
+		if($(domA).css('top') != 'auto'){
+			$(domA).css('top', parseInt($(domA).css('top')) + $(domB).height() );
+		}
+		if($(domA).css('bottom') != 'auto'){
+			$(domA).css('bottom', parseInt($(domA).css('bottom')) + $(domB).height() );
+		}
+	}
+
+	// 定义将要重排的元素
+	var willReset = [list[0]];
+
+	$.each(list, function(i, domTarget){
+		
+		if( compare(willReset[willReset.length -1], domTarget) ){
+			willReset.push(domTarget);// 不会把自身加入到对比
+		}
+
+	});
+
+	if(willReset.length > 1){
+		$.each(willReset, function(i, domA){
+			if(willReset[i+1]){
+				reset(domA, willReset[i+1]);
+			}
+		});
+		H5ComponentPie.reSort(willReset);
+	}
+
+	console.log(willReset);
+
+}
 
 
 
